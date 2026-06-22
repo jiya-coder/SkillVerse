@@ -418,9 +418,27 @@ function sendMessage() {
   // Simulate automatic bot reply after 1.5s
   setTimeout(() => {
     if (state.activeChatPartner === partnerIdToReply) {
+      const chatPartner = PARTNER_DATA[partnerIdToReply] || { name: "Study Partner", teach: "skills", learn: "skills" };
+      const userMessage = text.toLowerCase();
+      let botResponse = "";
+
+      if (userMessage.includes("hello") || userMessage.includes("hi") || userMessage.includes("hey")) {
+        botResponse = `Hey ${state.user.name || 'there'}! Ready to swap some skills? What would you like to focus on first? I'm excited to teach you ${chatPartner.teach}!`;
+      } else if (userMessage.includes("free") || userMessage.includes("time") || userMessage.includes("when") || userMessage.includes("meet")) {
+        botResponse = `I'm usually free on Thursdays around 4:00 PM or Friday afternoons. Do either of those work for you to set up our syllabus?`;
+      } else if (userMessage.includes("where") || userMessage.includes("location") || userMessage.includes("online")) {
+        botResponse = `We can meet at the campus library study rooms, or we can just jump on a video session right here in SkillVerse!`;
+      } else if (userMessage.includes("figma") || userMessage.includes("ui") || userMessage.includes("ux") || userMessage.includes("design")) {
+        botResponse = `I really want to learn Figma and wireframing basics! I've got some draft wireframes I'd love your feedback on.`;
+      } else if (userMessage.includes("react") || userMessage.includes("hooks") || userMessage.includes("javascript") || userMessage.includes("js") || userMessage.includes("css") || userMessage.includes("grid")) {
+        botResponse = `For ${chatPartner.teach}, we can cover the core building blocks first. I've got some codebase examples ready!`;
+      } else {
+        botResponse = `That sounds awesome! Let's cover that when we sync up. Do you want to set a time to connect?`;
+      }
+
       chat.messages.push({
         sender: "partner",
-        text: `Sounds good! Let's jump on a quick call this Thursday. Let me know if that works for you, ${state.user.name || 'there'}!`
+        text: botResponse
       });
       renderConversationMessages();
       saveState();
